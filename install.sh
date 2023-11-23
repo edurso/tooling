@@ -2,8 +2,7 @@
 
 # Run on a fresh Ubuntu 22.04 server install.
 
-# See: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
-set -Eeuo pipefail
+set -e
 
 # Display Constant
 readonly RED_BOLD='\033[1;31m'
