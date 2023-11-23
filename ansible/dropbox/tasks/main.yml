@@ -1,0 +1,54 @@
+- name: Install nautilus and nautilus-dropbox
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nautilus
+    - nautilus-dropbox
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ ansible_user_dir }}/dropbox/accounts/personal"
+    - "{{ ansible_user_dir }}/dropbox/accounts/umich"
+
+- name: Start Dropbox for Personal account
+  command: "HOME={{ ansible_user_dir }}/dropbox/accounts/personal dropbox start -i"
+
+- name: Start Dropbox for School account
+  command: "HOME={{ ansible_user_dir }}/dropbox/accounts/umich dropbox start -i"
+
+- name: Create symbolic links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: "{{ ansible_user_dir }}/dropbox/accounts/personal/Dropbox", dest: "{{ ansible_user_dir }}/dropbox/dbx-personal" }
+    - { src: "{{ ansible_user_dir }}/dropbox/accounts/umich/Dropbox (University of Michigan)", dest: "{{ ansible_user_dir }}/dropbox/dbx-umich" }
+
+- name: Autostart script
+  synchronize:
+    # The trailing slash is very important here
+    # It tells rsync to copy only the CONTENTS of the folder and not the folder itself
+    # This is vital to make sure this works will any usernames
+    src: files/
+    dest: ~/dropbox/
+    recursive: true
+
+- name: Make script executable
+  file:
+    path: "{{ ansible_user_dir }}/dropbox/dropbox.sh"
+    mode: '+x'
+
+- name: Add script to startup applications
+  desktop_entry:
+    name: "Dropbox Startup Script"
+    exec: "{{ ansible_user_dir }}/dropbox/dropbox.sh"
+    autostart: "yes"
+    filename: "dropbox-startup-script.desktop"
+    state: "present"
+    only_add_to: "autostart"
+    

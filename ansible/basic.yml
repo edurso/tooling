@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars:
+    ubuntu_release: jammy
+  roles:
+    - build
+    - dev
+    - docker
+    - conda

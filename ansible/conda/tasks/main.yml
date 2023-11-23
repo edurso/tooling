@@ -1,0 +1,19 @@
+- name: Download Miniconda installer
+  get_url:
+    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    dest: /tmp/Miniconda3-latest-Linux-x86_64.sh
+
+- name: Run Miniconda installer
+  shell: /bin/bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
+  args:
+    creates: $HOME/miniconda3  # Skip installation if Miniconda is already present
+
+- name: Add Miniconda to PATH
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export PATH="$HOME/miniconda3/bin:$PATH"'
+  when: "'$HOME/miniconda3/bin' not in ansible_env.PATH"
+
+- name: Update shell environment
+  command: "source {{ ansible_env.HOME }}/.zshrc"
+  when: "'$HOME/miniconda3/bin' not in ansible_env.PATH"

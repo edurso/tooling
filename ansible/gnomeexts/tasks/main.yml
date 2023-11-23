@@ -1,0 +1,40 @@
+- name: Install GNOME Shell Extension Dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gnome-shell
+    - chrome-gnome-shell
+
+- name: Download and Install Vitals GNOME Extension
+  git:
+    repo: https://github.com/corecoding/Vitals.git
+    dest: "~/.local/share/gnome-shell/extensions/vitals@corecoding.com"
+
+- name: Enable Vitals GNOME Extension
+  command: "gnome-extensions enable vitals@corecoding.com"
+
+- name: Download and Install Apps Menu GNOME Extension
+  git:
+    repo: https://github.com/gcampax/gnome-shell-extensions.git
+    dest: "~/.local/share/gnome-shell/extensions/apps-menu@gnome-shell-extensions.gcampax.github.com"
+
+- name: Enable Apps Menu GNOME Extension
+  command: "gnome-extensions enable apps-menu@gnome-shell-extensions.gcampax.github.com"
+
+- name: Download and Install Clipboard Indicator GNOME Extension
+  git:
+    repo: https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator.git
+    dest: "~/.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com"
+
+- name: Enable Clipboard Indicator GNOME Extension
+  command: "gnome-extensions enable clipboard-indicator@tudmotu.com"
+
+- name: Download and Install OpenWeather GNOME Extension
+  git:
+    repo: https://github.com/jenslody/gnome-shell-extension-openweather.git
+    dest: "~/.local/share/gnome-shell/extensions/openweather-extension@jenslody.de"
+
+- name: Enable OpenWeather GNOME Extension
+  command: "gnome-extensions enable openweather-extension@jenslody.de"
+  

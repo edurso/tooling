@@ -1,0 +1,33 @@
+- name: Update package cache
+  apt:
+    update_cache: yes
+
+- name: Install dependencies
+  apt:
+    name:
+      - linux-headers-{{ ansible_kernel }}
+      - build-essential
+      - dkms
+    state: present
+
+- name: Download CUDA Toolkit
+  get_url:
+    url: https://developer.download.nvidia.com/compute/cuda/repos/{{ ansible_distribution|lower }}/x86_64/cuda-repo-{{ ansible_distribution|lower }}_{{ ansible_distribution_release }}_amd64.deb
+    dest: /tmp/cuda-repo.deb
+
+- name: Install CUDA Repository
+  apt:
+    deb: /tmp/cuda-repo.deb
+
+- name: Add NVIDIA package GPG key
+  apt_key:
+    url: http://developer.download.nvidia.com/compute/cuda/repos/{{ ansible_distribution|lower }}/x86_64/7fa2af80.pub
+
+- name: Update package cache
+  apt:
+    update_cache: yes
+
+- name: Install CUDA Toolkit and Driver
+  apt:
+    name: cuda
+    state: present

@@ -1,0 +1,65 @@
+- name: Add Lazygit PPA
+  become: True
+  apt_repository:
+    repo: ppa:lazygit-team/release
+
+- name: Oh-My-Zsh
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/.oh-my-zsh
+    version: master
+
+- name: Clone Powerlevel10k repository
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
+
+- name: Clone zsh-autosuggestions
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+- name: Clone zsh-syntax-highlighting
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+- name: Install Vim-Plug
+  become: true
+  command: "curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  args:
+    creates: "~/.local/share/nvim/site/autoload/plug.vim"
+
+- name: Dotfiles
+  synchronize:
+    # The trailing slash is very important here
+    # It tells rsync to copy only the CONTENTS of the folder and not the folder itself
+    # This is vital to make sure this works will any usernames
+    src: files/home/
+    dest: ~/
+    recursive: true
+
+- name: Use ZSH as a default shell
+  become: true
+  command: chsh --shell /usr/bin/zsh {{ ansible_user_id }}
+
+- name: GitHub CLI APT Key
+  become: True
+  apt_key:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    keyring: /usr/share/keyrings/githubcli-archive-keyring.gpg
+
+- name: GitHub APT List
+  become: True
+  apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+    filename: github-cli
+
+- name: Install APT Packages
+  become: true
+  apt:
+    cache_valid_time: 604800
+    state: latest
+    name:
+      - gh
+      - lazygit

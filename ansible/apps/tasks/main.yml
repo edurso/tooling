@@ -1,0 +1,33 @@
+- name: Install applications
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - slack-desktop
+    - discord
+    - gnucash
+    - thunderbird
+    - scrcpy
+
+- name: Create a temporary directory
+  ansible.builtin.file:
+    path: /tmp/jetbrains_toolbox
+    state: directory
+
+- name: Download JetBrains Toolbox
+  ansible.builtin.get_url:
+    url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-latest.tar.gz"
+    dest: "/tmp/jetbrains_toolbox/jetbrains-toolbox.tar.gz"
+
+- name: Extract JetBrains Toolbox
+  ansible.builtin.unarchive:
+    src: "/tmp/jetbrains_toolbox/jetbrains-toolbox.tar.gz"
+    dest: "/opt"
+    remote_src: yes
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: "/opt/jetbrains-toolbox-latest/jetbrains-toolbox"
+    dest: "/usr/local/bin/jetbrains-toolbox"
+    state: link
