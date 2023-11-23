@@ -72,7 +72,7 @@ NEED_APT_UPDATE=false
 for PPA in "${PPAS[@]}"; do
     if ! grep -q "^deb .*${PPA}" /etc/apt/sources.list /etc/apt/sources.list.d/*;
     then
-        echo -e "${GREY_BOLD}Adding PPA: ${PPA}${NC}"
+        echo -e "${BLUE_BOLD}Adding PPA: ${PPA}${NC}"
         sudo apt-add-repository ppa:"${PPA}" -y
         NEED_APT_UPDATE=true
     fi
