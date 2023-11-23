@@ -40,3 +40,5 @@ if [ "${NEED_APT_UPDATE}" = true ]; then
     sudo apt update
 fi
 
+readonly SCRIPT_PATH="$HOME/dev/tooling"
+ansible-playbook -i "localhost," -c local "${SCRIPT_PATH}"/ansible/tmp.yml
