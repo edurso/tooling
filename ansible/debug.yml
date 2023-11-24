@@ -3,4 +3,4 @@
   vars:
     ubuntu_release: jammy
   roles:
-    - build
+    - cuda

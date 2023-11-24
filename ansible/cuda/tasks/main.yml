@@ -1,33 +1,34 @@
-- name: Update package cache
+- name: Install Linux headers
   apt:
-    update_cache: yes
-
-- name: Install dependencies
-  apt:
-    name:
-      - linux-headers-{{ ansible_kernel }}
-      - build-essential
-      - dkms
+    name: linux-headers-{{ ansible_kernel }}
     state: present
 
-- name: Download CUDA Toolkit
-  get_url:
-    url: https://developer.download.nvidia.com/compute/cuda/repos/{{ ansible_distribution|lower }}/x86_64/cuda-repo-{{ ansible_distribution|lower }}_{{ ansible_distribution_release }}_amd64.deb
-    dest: /tmp/cuda-repo.deb
-
-- name: Install CUDA Repository
-  apt:
-    deb: /tmp/cuda-repo.deb
-
-- name: Add NVIDIA package GPG key
+- name: Remove NVIDIA apt key
   apt_key:
-    url: http://developer.download.nvidia.com/compute/cuda/repos/{{ ansible_distribution|lower }}/x86_64/7fa2af80.pub
+    id: 7fa2af80
+    state: absent
 
-- name: Update package cache
+- name: Download CUDA keyring
+  get_url:
+    url: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+    dest: /tmp/cuda-keyring_1.1-1_all.deb
+
+- name: Install CUDA keyring
+  command: dpkg -i /tmp/cuda-keyring_1.1-1_all.deb
+
+- name: Update apt package cache
   apt:
     update_cache: yes
 
-- name: Install CUDA Toolkit and Driver
+- name: Install CUDA Toolkit and NVIDIA GPU Drivers
   apt:
-    name: cuda
+    name:
+      - cuda
+      - cuda-toolkit
+      - nvidia-gds
+    state: present
+
+- name: Install NVIDIA Container Toolkit
+  apt:
+    name: nvidia-container-toolkit
     state: present

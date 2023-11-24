@@ -1,3 +1,0 @@
-- name: Restart Vim
-  become: true
-  command: "vim -c 'PlugInstall|qall'"

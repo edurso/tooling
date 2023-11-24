@@ -10,10 +10,18 @@
 
 - name: Add Miniconda to PATH
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
+    dest: "$HOME/.zshrc"
     line: 'export PATH="$HOME/miniconda3/bin:$PATH"'
   when: "'$HOME/miniconda3/bin' not in ansible_env.PATH"
 
-- name: Update shell environment
-  command: "source {{ ansible_env.HOME }}/.zshrc"
-  when: "'$HOME/miniconda3/bin' not in ansible_env.PATH"
+- name: Environment file
+  synchronize:
+    # The trailing slash is very important here
+    # It tells rsync to copy only the CONTENTS of the folder and not the folder itself
+    # This is vital to make sure this works will any usernames
+    src: files/
+    dest: ~/miniconda3/
+    recursive: true
+
+- name: Create Conda environment
+  command: "$HOME/miniconda3/bin/conda env create -n edurso -f ~/miniconda3/env.yml"

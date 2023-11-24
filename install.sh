@@ -17,23 +17,18 @@ cuda=false
 
 # Script usage
 function show_usage {
-    echo "Usage: $0 [-d] [-a] [-z] [-p] [-h]"
+    echo "Usage: $0 [-d] [-p] [-h]"
     echo "-d: Run desktop code"
-    echo "-a: Run advanced code"
-    echo "-z: Run zsh code"
     echo "-p: Run personal code"
     echo "-h: Help"
     exit 1
 }
 
 # Parse CLI
-while getopts ":daph" opt; do
+while getopts ":dph" opt; do
     case $opt in
         d)
             desktop=true
-            ;;
-        a)
-            advanced=true
             ;;
         p)
             personal=true
@@ -89,6 +84,7 @@ git clone git@github.com:edurso/tooling $HOME/dev/tooling
 
 
 # ANSIBLE PLAYBOOKS
+export HOME=/home/"$SUDO_USER"
 readonly SCRIPT_PATH="$HOME/dev/tooling"
 ansible-playbook -i "localhost," -c local "${SCRIPT_PATH}"/ansible/basic.yml
 

@@ -10,7 +10,7 @@ readonly NC='\033[0m'
 
 # Force SSH
 echo -e "${BLUE_BOLD}Ensuring SSH keys are set up ...${NC}"
-if [ ! -f ~/.ssh/id_ed25519 ] && [ ! -f ~/.ssh/id_rsa ]; then
+if [ ! -f /home/"$SUDO_USER"/.ssh/id_ed25519 ] ; then
     echo -e "${RED_BOLD}Please see: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent${NC}"
     exit 1
 fi
@@ -40,5 +40,6 @@ if [ "${NEED_APT_UPDATE}" = true ]; then
     sudo apt update
 fi
 
-readonly SCRIPT_PATH="$HOME/dev/tooling"
-ansible-playbook -i "localhost," -c local "${SCRIPT_PATH}"/ansible/tmp.yml
+export HOME=/home/"$SUDO_USER"
+readonly SCRIPT_PATH="$HOME"/dev/tooling
+ansible-playbook -i "localhost," -c local "${SCRIPT_PATH}"/ansible/debug.yml
