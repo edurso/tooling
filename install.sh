@@ -15,7 +15,10 @@ desktop=false
 personal=false
 cuda=false
 
-# Script usage
+# User Home Directory
+export HOME=/home/"$SUDO_USER"
+
+# Script Usage
 function show_usage {
     echo "Usage: $0 [-d] [-p] [-h]"
     echo "-d: Run desktop code"
@@ -46,7 +49,7 @@ done
 
 # Force SSH
 echo -e "${BLUE_BOLD}Ensuring SSH keys are set up ...${NC}"
-if [ ! -f ~/.ssh/id_ed25519 ] && [ ! -f ~/.ssh/id_rsa ]; then
+if [ ! -f "$HOME"/.ssh/id_ed25519 ] && [ ! -f "$HOME"/.ssh/id_rsa ]; then
     echo -e "${RED_BOLD}Please see: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent${NC}"
     exit 1
 fi
@@ -80,13 +83,12 @@ sudo apt install -y aptitude ansible git git-lfs
 
 
 # Clone playbooks
-if [ ! -d "$HOME/dev/tooling"]; then
+if [ ! -d "$HOME"/dev/tooling ]; then
     git clone git@github.com:edurso/tooling $HOME/dev/tooling
 fi
 
 
 # ANSIBLE PLAYBOOKS
-export HOME=/home/"$SUDO_USER"
 readonly SCRIPT_PATH="$HOME/dev/tooling"
 ansible-playbook -i "localhost," -c local "${SCRIPT_PATH}"/ansible/basic.yml
 
