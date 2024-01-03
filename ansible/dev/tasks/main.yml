@@ -35,7 +35,6 @@
     name: pynvim
 
 - name: Install Neovim plugins
-  become: true
   shell: "nvim +PlugInstall +UpdateRemotePlugins +qall"
 
 
