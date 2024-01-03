@@ -1,7 +1,7 @@
-# - name: Add Lazygit PPA
-#   become: True
-#   apt_repository:
-#     repo: ppa:lazygit-team/release
+- name: Add Lazygit PPA
+  become: True
+  apt_repository:
+    repo: ppa:lazygit-team/release
 
 - name: Oh-My-Zsh
   git:
@@ -75,4 +75,4 @@
     state: latest
     name:
       - gh
-      # - lazygit
+      - lazygit
