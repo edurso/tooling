@@ -80,7 +80,9 @@ sudo apt install -y aptitude ansible git git-lfs
 
 
 # Clone playbooks
-git clone git@github.com:edurso/tooling $HOME/dev/tooling
+if [ ! -d "$HOME/dev/tooling"]; then
+    git clone git@github.com:edurso/tooling $HOME/dev/tooling
+fi
 
 
 # ANSIBLE PLAYBOOKS
