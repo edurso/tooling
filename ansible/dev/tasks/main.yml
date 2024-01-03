@@ -34,8 +34,8 @@
   pip:
     name: pynvim
 
-- name: Install Neovim plugins
-  shell: "nvim +PlugInstall +UpdateRemotePlugins +qall"
+# - name: Install Neovim plugins
+#   shell: "nvim +PlugInstall +UpdateRemotePlugins +qall"
 
 
 - name: Dotfiles
