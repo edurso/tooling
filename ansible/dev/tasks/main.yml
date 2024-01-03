@@ -1,8 +1,3 @@
-- name: Add Lazygit PPA
-  become: True
-  apt_repository:
-    repo: ppa:lazygit-team/release
-
 - name: Oh-My-Zsh
   git:
     repo: https://github.com/ohmyzsh/ohmyzsh.git
@@ -75,4 +70,22 @@
     state: latest
     name:
       - gh
-      - lazygit
+
+- name: Get LazyGit version
+  command: "curl -s 'https://api.github.com/repos/jesseduffield/lazygit/releases/latest' | grep -Po '\"tag_name\": \"v\\K[^\"]*'"
+  register: lazygit_version
+
+- name: Download LazyGit tar.gz
+  command: "curl -Lo lazygit.tar.gz 'https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_{{ lazygit_version.stdout }}_Linux_x86_64.tar.gz'"
+  args:
+    chdir: "/tmp"
+
+- name: Extract LazyGit tar.gz
+  command: "tar xf lazygit.tar.gz lazygit"
+  args:
+    chdir: "/tmp"
+
+- name: Install LazyGit to /usr/local/bin
+  command: "sudo install lazygit /usr/local/bin"
+  args:
+    chdir: "/tmp"
