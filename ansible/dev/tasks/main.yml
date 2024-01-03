@@ -1,7 +1,7 @@
-- name: Add Lazygit PPA
-  become: True
-  apt_repository:
-    repo: ppa:lazygit-team/release
+# - name: Add Lazygit PPA
+#   become: True
+#   apt_repository:
+#     repo: ppa:lazygit-team/release
 
 - name: Oh-My-Zsh
   git:
@@ -32,7 +32,7 @@
 
 - name: Restart Vim
   become: true
-  command: "vim -c 'PlugInstall|qall'"
+  command: nvim -c "PlugInstall" -c ":qa!"
 
 - name: Install pynvim
   become: true
@@ -41,7 +41,7 @@
 
 - name: Update remote plugins in Vim
   become: true
-  command: "vim -c 'UpdateRemotePlugins|qall'"
+  command: nvim -c "UpdateRemotePlugins" -c ":qa!"
 
 - name: Dotfiles
   synchronize:
@@ -75,4 +75,4 @@
     state: latest
     name:
       - gh
-      - lazygit
+      # - lazygit
