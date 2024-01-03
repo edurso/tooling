@@ -25,18 +25,13 @@
   args:
     creates: "~/.local/share/nvim/site/autoload/plug.vim"
 
-- name: Restart Vim
-  become: true
-  command: nvim -c "PlugInstall" -c ":qa!"
-
 - name: Install pynvim
   become: true
   pip:
     name: pynvim
 
-- name: Update remote plugins in Vim
-  become: true
-  command: nvim -c "UpdateRemotePlugins" -c ":qa!"
+- name: Install Neovim plugins
+  command: "nvim -c 'PlugInstall | PlugUpdate | UpdateRemotePlugins | qa'"
 
 - name: Dotfiles
   synchronize:
