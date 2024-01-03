@@ -39,6 +39,13 @@
   apt:
     update_cache: yes
 
+- name: Upgrade APT Packages
+  become: True
+  apt:
+    cache_valid_time: 604800
+    state: latest
+    upgrade: yes
+
 - name: Install Docker packages
   become: True
   apt:
